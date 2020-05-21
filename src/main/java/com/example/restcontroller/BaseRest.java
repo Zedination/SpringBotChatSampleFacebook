@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BaseRest {
-	@GetMapping(path = {"/","/webhook"})
+	@GetMapping("/")
 	public String welcome() {
 		return "Welcome to my first webhook!";
 	}
