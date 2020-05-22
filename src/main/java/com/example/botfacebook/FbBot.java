@@ -1,5 +1,7 @@
 package com.example.botfacebook;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
@@ -45,13 +47,13 @@ public class FbBot extends Bot {
 	 * Text" which the user sees when it opens up the chat window. Uncomment the
 	 * {@code @PostConstruct} annotation only after you have verified your webhook.
 	 */
-	// @PostConstruct
+	@PostConstruct
 	public void init() {
 		setGetStartedButton("hi");
 		setGreetingText(new Payload[] { new Payload().setLocale("default")
-				.setText("JBot is a Java Framework to help"
-						+ " developers make Facebook, and Slack bots easily. You can see a quick demo by clicking "
-						+ "the \"Get Started\" button or just typing \"Hi\".") });
+				.setText("Hello bạn, đây là demo bot chat đập troai của anh Đức cũng đập troai nốt,"
+						+ " các bạn có thể tra cứu rất nhiều thông tin hữu ích tại đây. "
+						+ "Hãy click vào \"Get Started\" hoặc chat \"Hi\" để bắt đầu sử dụng bot chat.") });
 	}
 
 	@Controller(events = { EventType.MESSAGE })
@@ -87,7 +89,10 @@ public class FbBot extends Bot {
 	@Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
 	public void onReceiveQuickReply(Event event) {
 		if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
-			reply(event, "Cool! You can type: \n - Show Buttons \n - Show List \n - Setup meeting");
+			reply(event, "OK, bạn có thể gõ các lệnh sau để tra cứu thông tin: \n"
+					+ "- Dự báo thời tiết Hà Nội\n"
+					+ "- Xem các môn học hôm nay\n"
+					+ "- Show các ví dụ demo");
 		} else {
 			reply(event, "Bai bai, gặp lại bạn sau nhé");
 		}
@@ -99,14 +104,14 @@ public class FbBot extends Bot {
 	 *
 	 * @param event
 	 */
-	@Controller(events = EventType.MESSAGE, pattern = "(?i:button)")
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:ví dụ demo)")
 	public void showButtons(Event event) {
 		Button[] buttons = new Button[] {
-				new Button().setType("web_url").setUrl("https://blog.rampatra.com/how-to-make-facebook-bots-in-java")
-						.setTitle("JBot Docs"),
-				new Button().setType("web_url").setUrl("https://goo.gl/uKrJWX").setTitle("Buttom Template") };
+				new Button().setType("web_url").setUrl("https://leanhduc-forecast.herokuapp.com")
+						.setTitle("API thời tiết"),
+				new Button().setType("web_url").setUrl("https://leanhduc-forecast.herokuapp.com/crawler").setTitle("Crawler dữ liệu thời tiết") };
 		reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(
-				new Payload().setTemplateType("button").setText("These are 2 link buttons.").setButtons(buttons))));
+				new Payload().setTemplateType("button").setText("Có 2 ví dụ demo cho bạn tham khảo.").setButtons(buttons))));
 	}
 
 	/**
