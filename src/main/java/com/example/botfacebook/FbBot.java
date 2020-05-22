@@ -116,8 +116,8 @@ public class FbBot extends Bot {
 	}
 	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho)")
-	public void trashTalks(Event event, User user) {
-		String msgback = "Bạn "+user.getFirstName() + " " + user.getLastName() +" đã nói đúng lại còn nói to!";
+	public void trashTalks(Event event) {
+		String msgback = "Bạn "+event.getSender().getFirstName() + " " + event.getSender().getLastName() +" đã nói đúng lại còn nói to!";
 		reply(event, msgback);
 	}
 	/**
