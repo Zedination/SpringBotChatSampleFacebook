@@ -9,6 +9,7 @@ import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
 import me.ramswaroop.jbot.core.common.JBot;
 import me.ramswaroop.jbot.core.facebook.Bot;
+import me.ramswaroop.jbot.core.facebook.FbService;
 import me.ramswaroop.jbot.core.facebook.models.Attachment;
 import me.ramswaroop.jbot.core.facebook.models.Button;
 import me.ramswaroop.jbot.core.facebook.models.Element;
@@ -117,7 +118,10 @@ public class FbBot extends Bot {
 	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho)")
 	public void trashTalks(Event event) {
-		String msgback = "Bạn "+event.getSender().getId()+" "+event.getSender().getFirstName() + " " + event.getSender().getLastName() +" đã nói đúng lại còn nói to!";
+		FbService fbService = new FbService();
+		//lấy thông tin từ user id của người gửi
+		User user = fbService.getUser(event.getSender().getId(), pageAccessToken);
+		String msgback = "Bạn "+user.getFirstName() + " " + user.getLastName() +" đã nói đúng lại còn nói to!";
 		reply(event, msgback);
 	}
 	/**
