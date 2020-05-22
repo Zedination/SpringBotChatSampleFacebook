@@ -54,6 +54,11 @@ public class FbBot extends Bot {
 						+ "the \"Get Started\" button or just typing \"Hi\".") });
 	}
 
+	@Controller(events = { EventType.MESSAGE })
+	public void otherChat(Event e) {
+		reply(e, "Bot đang được phát triển, còn nhỏ dại, mong bạn thông cảm!");
+	}
+
 	/**
 	 * This method gets invoked when a user clicks on the "Get Started" button or
 	 * just when someone simply types hi, hello or hey. When it is the former, the
@@ -68,7 +73,9 @@ public class FbBot extends Bot {
 		Button[] quickReplies = new Button[] { new Button().setContentType("text").setTitle("Có").setPayload("yes"),
 				new Button().setContentType("text").setTitle("Không").setPayload("no") };
 		reply(event,
-				new Message().setText("Hello, mình là bot đẹp troai, bạn có muốn tra cứu thông tin hay trò chuyện mới mềnh không?").setQuickReplies(quickReplies));
+				new Message().setText(
+						"Hello, mình là bot đẹp troai, bạn có muốn tra cứu thông tin hay trò chuyện mới mềnh không?")
+						.setQuickReplies(quickReplies));
 	}
 
 	/**
@@ -140,9 +147,10 @@ public class FbBot extends Bot {
 								.setButtons(new Button[] { new Button().setType("web_url").setTitle("View Docs")
 										.setUrl("https://blog.rampatra.com/how-to-make-facebook-bots-in-java") }))));
 	}
-	@Controller(events = EventType.MESSAGE, pattern = "(?i)(bot óc cho|bot ngu)")
+
+	@Controller(events = EventType.MESSAGE, pattern = "(?i)(bot óc chó|bot ngu)")
 	public void trashTalk(Event event) {
-		reply(event,"Bot là người nhân hậu, không chửi thề! Cút ngay không bố mày thông nát ass mày bây giờ!");
+		reply(event, "Bot là người nhân hậu, không chửi thề! Cút ngay không bố mày thông nát ass mày bây giờ!");
 	}
 
 	// Conversation feature of JBot
