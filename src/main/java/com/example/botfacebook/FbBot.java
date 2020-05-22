@@ -15,6 +15,7 @@ import me.ramswaroop.jbot.core.facebook.models.Element;
 import me.ramswaroop.jbot.core.facebook.models.Event;
 import me.ramswaroop.jbot.core.facebook.models.Message;
 import me.ramswaroop.jbot.core.facebook.models.Payload;
+import me.ramswaroop.jbot.core.facebook.models.User;
 
 @JBot
 @Profile("facebook")
@@ -104,7 +105,7 @@ public class FbBot extends Bot {
 	 *
 	 * @param event
 	 */
-	@Controller(events = EventType.MESSAGE, pattern = "(?i:ví dụ demo)")
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:ví dụ demo|vi du demo|vi du)")
 	public void showButtons(Event event) {
 		Button[] buttons = new Button[] {
 				new Button().setType("web_url").setUrl("https://leanhduc-forecast.herokuapp.com")
@@ -113,7 +114,12 @@ public class FbBot extends Bot {
 		reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(
 				new Payload().setTemplateType("button").setText("Có 2 ví dụ demo cho bạn tham khảo.").setButtons(buttons))));
 	}
-
+	
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho)")
+	public void trashTalks(Event event, User user) {
+		String msgback = "Bạn "+user.getFirstName() + " " + user.getLastName() +" đã nói đúng lại còn nói to!";
+		reply(event, msgback);
+	}
 	/**
 	 * This method is invoked when the user types "Show List" or something which has
 	 * "list" in it as defined in the {@code pattern}.
