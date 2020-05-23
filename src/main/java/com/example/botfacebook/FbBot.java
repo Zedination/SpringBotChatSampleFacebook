@@ -1,9 +1,13 @@
 package com.example.botfacebook;
 
+import java.net.URISyntaxException;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+
+import com.example.utils.UtilsInfor;
 
 import me.ramswaroop.jbot.core.common.Controller;
 import me.ramswaroop.jbot.core.common.EventType;
@@ -116,12 +120,12 @@ public class FbBot extends Bot {
 				new Payload().setTemplateType("button").setText("Có 2 ví dụ demo cho bạn tham khảo.").setButtons(buttons))));
 	}
 	
-	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho)")
-	public void trashTalks(Event event) {
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho|Hiệp óc chó|Hiep oc cho|Hiep ngu|Hiệp ngu)")
+	public void trashTalks(Event event) throws URISyntaxException {
 		FbService fbService = new FbService();
 		//lấy thông tin từ user id của người gửi
-		User user = fbService.getUser(event.getSender().getId(), pageAccessToken);
-		String msgback = "Bạn "+user.getFirstName() + " " + user.getLastName() +" đã nói đúng lại còn nói to!";
+		com.example.gsonobj.User user = UtilsInfor.getUserInfor(event.getSender().getId(), pageAccessToken);
+		String msgback = "Bạn "+user.getFirst_name() + " " + user.getLast_name() +" đã nói đúng lại còn nói to!";
 		reply(event, msgback);
 	}
 	/**
