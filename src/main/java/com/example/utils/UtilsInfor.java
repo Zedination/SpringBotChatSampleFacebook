@@ -3,25 +3,37 @@ package com.example.utils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.gsonobj.Message;
 import com.example.gsonobj.ResponseObjCurrent;
+import com.example.gsonobj.SendMessageObj;
 import com.example.gsonobj.User;
 import com.google.gson.Gson;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.Version;
+import com.restfb.types.send.IdMessageRecipient;
+import com.restfb.types.send.SendResponse;
 
 public class UtilsInfor {
 	@Value("${fbPageAccessToken}")
 	public static String pageAccessToken;
+	public static ArrayList<String> ListUserDk = new ArrayList<String>();
 	//sử dụng RestTemplate
 	public static User getUserInfor(String id, String token) throws URISyntaxException {
 		URIBuilder builder = new URIBuilder("https://graph.facebook.com/v7.0/"+id);
@@ -50,5 +62,14 @@ public class UtilsInfor {
         }else {
         	return null;
         }
+	}
+	public static void sendMessage(String userId, String message, String token) {
+		IdMessageRecipient recipient = new IdMessageRecipient(userId);
+		FacebookClient pageClient = new DefaultFacebookClient(pageAccessToken, Version.VERSION_7_0);
+
+		SendResponse resp = pageClient.publish("me/messages", SendResponse.class,
+		     Parameter.with("recipient", recipient), // the id or phone recipient
+			 Parameter.with("message", message));
+		
 	}
 }

@@ -100,9 +100,21 @@ public class FbBot extends Bot {
 	public void onReceiveQuickReply(Event event) {
 		if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
 			reply(event, "OK, sau đây là 1 số gợi ý để tra cứu thông tin: \n"
-					+ "- 'Thời tiết Hà Nội' hoặc '-cw Hà Nội' để xem thời tiết hiện tại ở Hà Nội\n"
-					+ "- 'Thời khóa biểu hôm nay' để xem thời khóa biểu ngày hôm nay\n"
-					+ "- 'Show các ví dụ demo' để xem 1 số ví dụ demo của cậu chủ\n"
+					+ "- Gõ 'Thời tiết Hà Nội' hoặc '-cw Hà Nội' để xem thời tiết hiện tại ở Hà Nội\n"
+					+ "- Gõ 'Thời khóa biểu hôm nay' để xem thời khóa biểu ngày hôm nay\n"
+					+ "- Gõ 'Show các ví dụ demo' để xem 1 số ví dụ demo của cậu chủ\n"
+					+ "- Hoặc gõ -help để xem tất cả các lệnh được hỗ trợ!");
+		} else {
+			reply(event, "Bai bai, gặp lại bạn sau nhé");
+		}
+	}
+	@Controller(events = EventType.QUICK_REPLY, pattern = "(dk|!dk)")
+	public void onReceiveXacNhanDangKy(Event event) {
+		if ("!dk".equals(event.getMessage().getQuickReply().getPayload())) {
+			reply(event, "OK, sau đây là 1 số gợi ý để tra cứu thông tin: \n"
+					+ "- Gõ 'Thời tiết Hà Nội' hoặc '-cw Hà Nội' để xem thời tiết hiện tại ở Hà Nội\n"
+					+ "- Gõ 'Thời khóa biểu hôm nay' để xem thời khóa biểu ngày hôm nay\n"
+					+ "- Gõ 'Show các ví dụ demo' để xem 1 số ví dụ demo của cậu chủ\n"
 					+ "- Hoặc gõ -help để xem tất cả các lệnh được hỗ trợ!");
 		} else {
 			reply(event, "Bai bai, gặp lại bạn sau nhé");
@@ -113,6 +125,10 @@ public class FbBot extends Bot {
 		String msgSender = e.getMessage().getText();
 		if("Thời tiết".toLowerCase().equals(StringUtils.left(msgSender.toLowerCase(),9))) {
 			String location = msgSender.substring(10,msgSender.length());
+			if(location.trim().length() == 0) {
+				reply(e,"Có vẻ bạn chưa nhập tên địa điểm cần tra cứu thông tin thời tiết.");
+				return;
+			}
 			try {
 				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
 				if(objCurrent.equals(null)) {
@@ -134,10 +150,14 @@ public class FbBot extends Bot {
 					reply(e, content);
 				}
 			}catch (Exception ex) {
-				reply(e, "Có lỗi xảy ra khi tra cứu, đợi mình kiểm tra lại nhé!");
+				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 			}
 		}else if("-cw".equals(StringUtils.left(msgSender, 3))) {
 			String location = msgSender.substring(4,msgSender.length());
+			if(location.trim().length() == 0) {
+				reply(e,"Có vẻ bạn chưa nhập tên địa điểm cần tra cứu thông tin thời tiết.");
+				return;
+			}
 			try {
 				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
 				if(objCurrent.equals(null)) {
@@ -159,7 +179,7 @@ public class FbBot extends Bot {
 					reply(e, content);
 				}
 			}catch (Exception ex) {
-				reply(e, "Có lỗi xảy ra khi tra cứu, đợi mình kiểm tra lại nhé!");
+				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 			}
 		}else {
 			reply(e, "Có vẻ bạn đã nhập sai lệnh, kiểm tra lại bạn nhé!");
@@ -173,6 +193,22 @@ public class FbBot extends Bot {
 				new Button().setType("web_url").setUrl("https://leanhduc-forecast.herokuapp.com/crawler").setTitle("Crawler dữ liệu thời tiết") };
 		reply(event, new Message().setAttachment(new Attachment().setType("template").setPayload(
 				new Payload().setTemplateType("button").setText("Có 2 ví dụ demo cho bạn tham khảo.").setButtons(buttons))));
+	}
+	@Controller(events = EventType.MESSAGE, pattern = "-help")
+	public void showHelp(Event event) {
+		reply(event, "- Gõ '-cw <Tên địa điểm>' hoặc 'Thời tiết + <Tên địa điểm>' để tra cứu thời tiết hiện tại của 1 địa điểm\n"
+				+"- Gõ '-tkb' hoặc 'Thời khóa biểu hôm nay' để xem hôm nay học những môn gì và ở phòng nào\n"
+				+"- Gõ '-dk' để xác nhận đăng ký nhận thông tin thời tiết mỗi 3 tiếng\n"
+				+ "- Gõ '-hdk' để xác nhận hủy đăng ký nhận thông tin thời tiết\n"
+				+"- ======Sẽ cập nhật thêm chức năng sau======");
+	}
+	@Controller(events = EventType.MESSAGE, pattern = "(-dk|-hdk)")
+	public void ConfirmDk(Event event) {
+		reply(event, "Chức năng đang được cậu chủ của bot phát triển!");
+	}
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:thời khóa biểu hôm nay|Thời khóa biểu hôm nay|-tkb)")
+	public void showTKB(Event event) {
+		reply(event, "Chức năng đang được phát triển. Bot vô cùng xin lỗi vì sự bất tiện này!");
 	}
 	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho|Hiệp óc chó|Hiep oc cho|Hiep ngu|Hiệp ngu)")
