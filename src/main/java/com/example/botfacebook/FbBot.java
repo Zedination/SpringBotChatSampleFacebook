@@ -1,12 +1,16 @@
 package com.example.botfacebook;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
+import com.example.gsonobj.ResponseObjCurrent;
 import com.example.utils.UtilsInfor;
 
 import me.ramswaroop.jbot.core.common.Controller;
@@ -95,23 +99,74 @@ public class FbBot extends Bot {
 	@Controller(events = EventType.QUICK_REPLY, pattern = "(yes|no)")
 	public void onReceiveQuickReply(Event event) {
 		if ("yes".equals(event.getMessage().getQuickReply().getPayload())) {
-			reply(event, "OK, bạn có thể gõ các lệnh sau để tra cứu thông tin: \n"
-					+ "- Dự báo thời tiết Hà Nội\n"
-					+ "- Xem các môn học hôm nay\n"
-					+ "- Show các ví dụ demo");
+			reply(event, "OK, sau đây là 1 số gợi ý để tra cứu thông tin: \n"
+					+ "- 'Thời tiết Hà Nội' hoặc '-cw Hà Nội' để xem thời tiết hiện tại ở Hà Nội\n"
+					+ "- 'Thời khóa biểu hôm nay' để xem thời khóa biểu ngày hôm nay\n"
+					+ "- 'Show các ví dụ demo' để xem 1 số ví dụ demo của cậu chủ\n"
+					+ "- Hoặc gõ -help để xem tất cả các lệnh được hỗ trợ!");
 		} else {
 			reply(event, "Bai bai, gặp lại bạn sau nhé");
 		}
 	}
-
-	/**
-	 * This method is invoked when the user types "Show Buttons" or something which
-	 * has "button" in it as defined in the {@code pattern}.
-	 *
-	 * @param event
-	 */
-	@Controller(events = EventType.MESSAGE, pattern = "(?i:ví dụ demo|vi du demo|vi du)")
-	public void showButtons(Event event) {
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:Thời tiết |-cw |thời tiết)")
+	public void thoiTiet(Event e) {
+		String msgSender = e.getMessage().getText();
+		if("Thời tiết".toLowerCase().equals(StringUtils.left(msgSender.toLowerCase(),9))) {
+			String location = msgSender.substring(10,msgSender.length());
+			try {
+				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
+				if(objCurrent.equals(null)) {
+					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+				}else {
+					int temp = (int)(objCurrent.getMain().getTemp()-272.15);
+					int feel_like = (int)(objCurrent.getMain().getFeels_like()-272.15);
+					int pressure = objCurrent.getMain().getPressure();
+					int humidity = objCurrent.getMain().getHumidity();
+					Double speed_wind = objCurrent.getWind().getSpeed();
+					int visibility = objCurrent.getVisibility()/1000;
+					String content = "Thời tiết hiện tại ở: "+location+"\n"
+							+ "Nhiêt độ: "+temp+" °C\n"
+							+ "Cảm giác như: "+feel_like+" °C\n"
+							+ "Độ ẩm: "+humidity+" %\n"
+							+ "Áp suất: "+pressure+" Hpa\n"
+							+ "Tốc độ gió: "+speed_wind+" m/s\n"
+							+ "Tầm nhìn xa: "+visibility+" km";
+					reply(e, content);
+				}
+			}catch (Exception ex) {
+				reply(e, "Có lỗi xảy ra khi tra cứu, đợi mình kiểm tra lại nhé!");
+			}
+		}else if("-cw".equals(StringUtils.left(msgSender, 3))) {
+			String location = msgSender.substring(4,msgSender.length());
+			try {
+				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
+				if(objCurrent.equals(null)) {
+					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+				}else {
+					int temp = (int)(objCurrent.getMain().getTemp()-272.15);
+					int feel_like = (int)(objCurrent.getMain().getFeels_like()-272.15);
+					int pressure = objCurrent.getMain().getPressure();
+					int humidity = objCurrent.getMain().getHumidity();
+					Double speed_wind = objCurrent.getWind().getSpeed();
+					int visibility = objCurrent.getVisibility()/1000;
+					String content = "Thời tiết hiện tại ở: "+location+"\n"
+							+ "Nhiêt độ: "+temp+" °C\n"
+							+ "Cảm giác như: "+feel_like+" °C\n"
+							+ "Độ ẩm: "+humidity+" %\n"
+							+ "Áp suất: "+pressure+" Hpa\n"
+							+ "Tốc độ gió: "+speed_wind+" m/s\n"
+							+ "Tầm nhìn xa: "+visibility+" km";
+					reply(e, content);
+				}
+			}catch (Exception ex) {
+				reply(e, "Có lỗi xảy ra khi tra cứu, đợi mình kiểm tra lại nhé!");
+			}
+		}else {
+			reply(e, "Có vẻ bạn đã nhập sai lệnh, kiểm tra lại bạn nhé!");
+		}
+	}
+	@Controller(events = EventType.MESSAGE, pattern = "(?i:ví dụ demo|vi du demo|vi du|demo)")
+	public void showButtonsWebDemo(Event event) {
 		Button[] buttons = new Button[] {
 				new Button().setType("web_url").setUrl("https://leanhduc-forecast.herokuapp.com")
 						.setTitle("API thời tiết"),
@@ -122,49 +177,20 @@ public class FbBot extends Bot {
 	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i:Hà óc chó|Ha oc cho|Vương óc chó|Vuong oc cho|Tín óc chó|Tin oc cho|Hiệp óc chó|Hiep oc cho|Hiep ngu|Hiệp ngu)")
 	public void trashTalks(Event event) throws URISyntaxException {
-		FbService fbService = new FbService();
 		//lấy thông tin từ user id của người gửi
 		com.example.gsonobj.User user = UtilsInfor.getUserInfor(event.getSender().getId(), pageAccessToken);
 		String msgback = "Bạn "+user.getFirst_name() + " " + user.getLast_name() +" đã nói đúng lại còn nói to!";
 		reply(event, msgback);
 	}
-	/**
-	 * This method is invoked when the user types "Show List" or something which has
-	 * "list" in it as defined in the {@code pattern}.
-	 *
-	 * @param event
-	 */
-	@Controller(events = EventType.MESSAGE, pattern = "(?i:list)")
-	public void showList(Event event) {
-		Element[] elements = new Element[] {
-				new Element().setTitle("AnimateScroll").setSubtitle("A jQuery Plugin for Animating Scroll.")
-						.setImageUrl("https://plugins.compzets.com/images/as-logo.png")
-						.setDefaultAction(new Button().setType("web_url").setMessengerExtensions(true)
-								.setUrl("https://plugins.compzets.com/animatescroll/")),
-				new Element().setTitle("Windows on Top").setSubtitle("Keeps a specific Window on Top of all others.")
-						.setImageUrl("https://plugins.compzets.com/images/compzets-logo.png")
-						.setDefaultAction(new Button().setType("web_url").setMessengerExtensions(true)
-								.setUrl("https://www.compzets.com/view-upload.php?id=702&action=view")),
-				new Element().setTitle("SimpleFill").setSubtitle("Simplest form filler ever.")
-						.setImageUrl("https://plugins.compzets.com/simplefill/chrome-extension/icon-64.png")
-						.setDefaultAction(new Button().setType("web_url").setMessengerExtensions(true)
-								.setUrl("https://plugins.compzets.com/simplefill/")) };
-		reply(event, new Message().setAttachment(new Attachment().setType("template")
-				.setPayload(new Payload().setTemplateType("list").setElements(elements))));
-	}
 
-	/**
-	 * Show the github project url when the user says bye.
-	 *
-	 * @param event
-	 */
+	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i)(bye|tata|ttyl|cya|see you|gặp lại sau|pp)")
 	public void showGithubLink(Event event) {
 		reply(event,
 				new Message().setAttachment(new Attachment().setType("template")
-						.setPayload(new Payload().setTemplateType("button").setText("Bye. Happy coding!")
-								.setButtons(new Button[] { new Button().setType("web_url").setTitle("View Docs")
-										.setUrl("https://blog.rampatra.com/how-to-make-facebook-bots-in-java") }))));
+						.setPayload(new Payload().setTemplateType("button").setText("Gặp lại bạn sau!")
+								.setButtons(new Button[] { new Button().setType("web_url").setTitle("Chi tiết thời tiết tại đây!")
+										.setUrl("https://leanhduc-forecast.herokuapp.com/") }))));
 	}
 
 	@Controller(events = EventType.MESSAGE, pattern = "(?i)(bot óc chó|bot ngu)")
