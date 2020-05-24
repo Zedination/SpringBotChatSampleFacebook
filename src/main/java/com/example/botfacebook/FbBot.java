@@ -134,8 +134,8 @@ public class FbBot extends Bot {
 				if(objCurrent.equals(null)) {
 					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 				}else {
-					int temp = (int)(objCurrent.getMain().getTemp()-272.15);
-					int feel_like = (int)(objCurrent.getMain().getFeels_like()-272.15);
+					int temp = (int)(objCurrent.getMain().getTemp()-273.15);
+					int feel_like = (int)(objCurrent.getMain().getFeels_like()-273.15);
 					int pressure = objCurrent.getMain().getPressure();
 					int humidity = objCurrent.getMain().getHumidity();
 					Double speed_wind = objCurrent.getWind().getSpeed();
