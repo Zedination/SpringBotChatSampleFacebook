@@ -132,7 +132,7 @@ public class FbBot extends Bot {
 			try {
 				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
 				if(objCurrent.equals(null)) {
-					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu! \n Mẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 				}else {
 					int temp = (int)(objCurrent.getMain().getTemp()-273.15);
 					int feel_like = (int)(objCurrent.getMain().getFeels_like()-273.15);
@@ -150,7 +150,7 @@ public class FbBot extends Bot {
 					reply(e, content);
 				}
 			}catch (Exception ex) {
-				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu! \n Mẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 			}
 		}else if("-cw".equals(StringUtils.left(msgSender, 3))) {
 			String location = msgSender.substring(4,msgSender.length());
@@ -161,7 +161,7 @@ public class FbBot extends Bot {
 			try {
 				ResponseObjCurrent objCurrent = UtilsInfor.getCurrentWheather(location);
 				if(objCurrent.equals(null)) {
-					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+					reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu! \n Mẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 				}else {
 					int temp = (int)(objCurrent.getMain().getTemp()-272.15);
 					int feel_like = (int)(objCurrent.getMain().getFeels_like()-272.15);
@@ -179,7 +179,7 @@ public class FbBot extends Bot {
 					reply(e, content);
 				}
 			}catch (Exception ex) {
-				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu!\\nMẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
+				reply(e, "Không tìm thấy địa điểm bạn muốn tra cứu! \n Mẹo: hãy nhập tên địa chỉ không dấu hoặc theo chuẩn tiếng Anh sẽ có kết quả chính xác hơn.");
 			}
 		}else {
 			reply(e, "Có vẻ bạn đã nhập sai lệnh, kiểm tra lại bạn nhé!");
