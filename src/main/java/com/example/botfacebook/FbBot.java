@@ -57,14 +57,14 @@ public class FbBot extends Bot {
 	 * Text" which the user sees when it opens up the chat window. Uncomment the
 	 * {@code @PostConstruct} annotation only after you have verified your webhook.
 	 */
-	@PostConstruct
-	public void init() {
-		setGetStartedButton("hi");
-		setGreetingText(new Payload[] { new Payload().setLocale("default")
-				.setText("Hello bạn, đây là demo bot chat đập troai của anh Đức cũng đập troai nốt,"
-						+ " các bạn có thể tra cứu rất nhiều thông tin hữu ích tại đây. "
-						+ "Hãy click vào \"Get Started\" hoặc chat \"Hi\" để bắt đầu sử dụng bot chat.") });
-	}
+//	@PostConstruct
+//	public void init() {
+//		setGetStartedButton("hi");
+//		setGreetingText(new Payload[] { new Payload().setLocale("default")
+//				.setText("Hello bạn, đây là demo bot chat đập troai của anh Đức cũng đập troai nốt,"
+//						+ " các bạn có thể tra cứu rất nhiều thông tin hữu ích tại đây. "
+//						+ "Hãy click vào \"Get Started\" hoặc chat \"Hi\" để bắt đầu sử dụng bot chat.") });
+//	}
 
 	@Controller(events = { EventType.MESSAGE })
 	public void otherChat(Event e) {
