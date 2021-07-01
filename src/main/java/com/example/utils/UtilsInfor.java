@@ -72,4 +72,15 @@ public class UtilsInfor {
 			 Parameter.with("message", message));
 		
 	}
+	
+//	public static void main(String[] args) throws URISyntaxException {
+//		String token = "EAAJAgl7Pj50BALiFGFgSqKYZC7wgVoAL1TlIFjp6ZB9jHrZCZC44hQJe6eAtZCITt7rYMPLUiSDVD9zZA75xHZCksheUj2dE8mc5YZCiXcie0b0DGn06bnmoabsmrWBzMMgJ13A5huqZAoGZBmgZC5vDuuiNtcrqtvGAVHaZB12MhTLwgkg1fm9zWbuu8PDWW7gpWSIZD";
+//		String id = "3177698848959351";
+//		URIBuilder builder = new URIBuilder("https://graph.facebook.com/v7.0/"+id);
+//		builder.addParameter("access_token", token);
+//		URI uri = builder.build();
+//		RestTemplate restTemplate = new RestTemplate();
+//		User response = restTemplate.getForObject(uri,User.class);
+//		System.out.println(response.toString());
+//	}
 }
