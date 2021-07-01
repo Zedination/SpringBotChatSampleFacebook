@@ -218,6 +218,13 @@ public class FbBot extends Bot {
 		String msgback = "Bạn "+user.getFirst_name() + " " + user.getLast_name() +" đã nói đúng lại còn nói to!";
 		reply(event, msgback);
 	}
+	
+	@Controller(events = EventType.MESSAGE, pattern = "(?i)(user-info|info)")
+	public void getId(Event event) throws URISyntaxException {
+		com.example.gsonobj.User user = UtilsInfor.getUserInfor(event.getSender().getId(), pageAccessToken);
+		String msg = "info người gửi: "+user.toString()+"\n người gửi: "+event.getSender().getId()+"\n raw: "+ event.getSender().toString();
+		reply(event, msg);
+	}
 
 	
 	@Controller(events = EventType.MESSAGE, pattern = "(?i)(bye|tata|ttyl|cya|see you|gặp lại sau|pp)")
