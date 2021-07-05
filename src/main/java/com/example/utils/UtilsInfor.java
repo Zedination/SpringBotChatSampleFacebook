@@ -36,7 +36,7 @@ public class UtilsInfor {
 	public static ArrayList<String> ListUserDk = new ArrayList<String>();
 	//sử dụng RestTemplate
 	public static User getUserInfor(String id, String token) throws URISyntaxException {
-		URIBuilder builder = new URIBuilder("https://graph.facebook.com/v7.0/"+id);
+		URIBuilder builder = new URIBuilder("https://graph.facebook.com/v11.0/"+id);
 		builder.addParameter("access_token", token);
 		URI uri = builder.build();
 		RestTemplate restTemplate = new RestTemplate();
