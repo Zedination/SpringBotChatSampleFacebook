@@ -57,7 +57,7 @@ public class FbBot extends Bot {
 	 * Text" which the user sees when it opens up the chat window. Uncomment the
 	 * {@code @PostConstruct} annotation only after you have verified your webhook.
 	 */
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		setGetStartedButton("hi");
 		setGreetingText(new Payload[] { new Payload().setLocale("default")
