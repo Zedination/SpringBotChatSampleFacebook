@@ -27,7 +27,7 @@ import me.ramswaroop.jbot.core.facebook.models.Payload;
 import me.ramswaroop.jbot.core.facebook.models.User;
 
 @JBot
-@Profile("facebook")
+//@Profile("facebook")
 public class FbBot extends Bot {
 
 	/**
