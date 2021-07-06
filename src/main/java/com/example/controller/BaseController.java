@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.utils.UtilsInfor;
 
-import me.ramswaroop.jbot.core.facebook.FbApiEndpoints;
-import me.ramswaroop.jbot.core.facebook.FbService;
-import me.ramswaroop.jbot.core.facebook.models.User;
-
 @Controller
 public class BaseController {
 	@Value("${fbPageAccessToken}")

@@ -13,18 +13,18 @@ import org.springframework.context.annotation.Profile;
 import com.example.gsonobj.ResponseObjCurrent;
 import com.example.utils.UtilsInfor;
 
-import me.ramswaroop.jbot.core.common.Controller;
-import me.ramswaroop.jbot.core.common.EventType;
-import me.ramswaroop.jbot.core.common.JBot;
-import me.ramswaroop.jbot.core.facebook.Bot;
-import me.ramswaroop.jbot.core.facebook.FbService;
-import me.ramswaroop.jbot.core.facebook.models.Attachment;
-import me.ramswaroop.jbot.core.facebook.models.Button;
-import me.ramswaroop.jbot.core.facebook.models.Element;
-import me.ramswaroop.jbot.core.facebook.models.Event;
-import me.ramswaroop.jbot.core.facebook.models.Message;
-import me.ramswaroop.jbot.core.facebook.models.Payload;
-import me.ramswaroop.jbot.core.facebook.models.User;
+import com.example.jbot.core.common.Controller;
+import com.example.jbot.core.common.EventType;
+import com.example.jbot.core.common.JBot;
+import com.example.jbot.core.facebook.Bot;
+import com.example.jbot.core.facebook.FbService;
+import com.example.jbot.core.facebook.models.Attachment;
+import com.example.jbot.core.facebook.models.Button;
+import com.example.jbot.core.facebook.models.Element;
+import com.example.jbot.core.facebook.models.Event;
+import com.example.jbot.core.facebook.models.Message;
+import com.example.jbot.core.facebook.models.Payload;
+import com.example.jbot.core.facebook.models.User;
 
 @JBot
 //@Profile("facebook")
